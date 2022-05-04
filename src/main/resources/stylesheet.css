@@ -1,0 +1,23 @@
+.main_button{
+    -fx-background-color: #666666;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #202020;
+}
+
+.main_button:pressed{
+    -fx-background-color: #555555;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #202020;
+}
+
+.main_colorpicker{
+    -fx-background-color: #666666;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #202020;
+}
+
+.main_textfield{
+    -fx-background-color: #666666;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #202020;
+}

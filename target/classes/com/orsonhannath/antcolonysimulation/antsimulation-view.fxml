@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+
+<Pane maxHeight="540.0" maxWidth="960.0" minHeight="540.0" minWidth="960.0" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.orsonhannath.antcolonysimulation.AntColonyController">
+   <children>
+      <Canvas fx:id="canvas" height="540.0" width="960.0" />
+      <VBox prefHeight="70.0" prefWidth="960.0">
+         <children>
+            <HBox prefHeight="25.0" prefWidth="200.0">
+               <children>
+                  <Button id="brush_obstruction" fx:id="brush_obstruction" mnemonicParsing="false" onAction="#setBrush_obstruction" prefHeight="50.0" prefWidth="110.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Obstruction">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button id="brush_food" fx:id="brush_food" mnemonicParsing="false" onAction="#setBrush_food" prefHeight="50.0" prefWidth="110.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Food">
+                     <HBox.margin>
+                        <Insets bottom="5.0" right="10.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button id="brush_danger" fx:id="brush_danger" mnemonicParsing="false" onAction="#setBrush_danger" prefHeight="50.0" prefWidth="110.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Danger">
+                     <HBox.margin>
+                        <Insets bottom="5.0" right="10.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button id="brush_colony1" fx:id="brush_colony1" mnemonicParsing="false" onAction="#setBrush_colony1" prefHeight="50.0" prefWidth="65.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Colony 1">
+                     <HBox.margin>
+                        <Insets bottom="5.0" right="7.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="col1_home_btn" mnemonicParsing="false" onAction="#setBrush_colony1_home" prefHeight="50.0" prefWidth="65.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Location">
+                     <HBox.margin>
+                        <Insets bottom="5.0" right="10.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button id="brush_colony2" fx:id="brush_colony2" mnemonicParsing="false" onAction="#setBrush_colony2" prefHeight="50.0" prefWidth="65.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Colony 2">
+                     <HBox.margin>
+                        <Insets bottom="5.0" right="7.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="col2_home_btn" mnemonicParsing="false" onAction="#setBrush_colony2_home" prefHeight="50.0" prefWidth="65.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Location">
+                     <HBox.margin>
+                        <Insets bottom="5.0" right="10.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button id="brush_colony3" fx:id="brush_colony3" mnemonicParsing="false" onAction="#setBrush_colony3" prefHeight="50.0" prefWidth="65.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Colony 3">
+                     <HBox.margin>
+                        <Insets bottom="5.0" right="7.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="col3_home_btn" mnemonicParsing="false" onAction="#setBrush_colony3_home" prefHeight="50.0" prefWidth="65.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Location">
+                     <HBox.margin>
+                        <Insets bottom="5.0" right="10.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button id="brush_colony4" fx:id="brush_colony4" mnemonicParsing="false" onAction="#setBrush_colony4" prefHeight="50.0" prefWidth="65.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Colony 4">
+                     <HBox.margin>
+                        <Insets bottom="5.0" right="7.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="col4_home_btn" mnemonicParsing="false" onAction="#setBrush_colony4_home" prefHeight="50.0" prefWidth="65.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Location">
+                     <HBox.margin>
+                        <Insets bottom="5.0" right="10.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox prefHeight="25.0" prefWidth="960.0">
+               <children>
+                  <ColorPicker fx:id="obstruction_color" prefHeight="25.0" prefWidth="110.0" styleClass="main_colorpicker" stylesheets="@../../../stylesheet.css">
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin>
+                     <value>
+                        <Color red="0.062745101749897" green="0.062745101749897" blue="0.062745101749897" />
+                     </value>
+                  </ColorPicker>
+                  <ColorPicker fx:id="food_color" prefHeight="25.0" prefWidth="110.0" styleClass="main_colorpicker" stylesheets="@../../../stylesheet.css">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                     <value>
+                        <Color red="0.4381091594696045" green="0.8157894611358643" blue="0.4381091594696045" />
+                     </value>
+                  </ColorPicker>
+                  <ColorPicker fx:id="danger_color" prefHeight="25.0" prefWidth="110.0" styleClass="main_colorpicker" stylesheets="@../../../stylesheet.css">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                     <value>
+                        <Color red="0.8157894611358643" green="0.40034112334251404" blue="0.40034112334251404" />
+                     </value>
+                  </ColorPicker>
+                  <ColorPicker fx:id="colony1_color" prefHeight="25.0" prefWidth="137.0" styleClass="main_colorpicker" stylesheets="@../../../stylesheet.css">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                     <value>
+                        <Color red="0.37530457973480225" green="0.7456546425819397" blue="0.8026315569877625" />
+                     </value>
+                  </ColorPicker>
+                  <ColorPicker fx:id="colony2_color" prefHeight="25.0" prefWidth="137.0" styleClass="main_colorpicker" stylesheets="@../../../stylesheet.css">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                     <value>
+                        <Color red="0.37280702590942383" green="0.42141813039779663" blue="0.7894737124443054" />
+                     </value>
+                  </ColorPicker>
+                  <ColorPicker fx:id="colony3_color" prefHeight="25.0" prefWidth="137.0" styleClass="main_colorpicker" stylesheets="@../../../stylesheet.css">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                     <value>
+                        <Color red="0.6608004570007324" green="0.3634868562221527" blue="0.6710526347160339" />
+                     </value>
+                  </ColorPicker>
+                  <ColorPicker fx:id="colony4_color" prefHeight="25.0" prefWidth="137.0" styleClass="main_colorpicker" stylesheets="@../../../stylesheet.css">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                     <value>
+                        <Color red="0.7236841917037964" green="0.3417397737503052" blue="0.4754203259944916" />
+                     </value>
+                  </ColorPicker>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+      <HBox layoutY="505.0" prefHeight="25.0" prefWidth="960.0">
+         <children>
+            <Button fx:id="eraser_button" mnemonicParsing="false" onAction="#setBrush_eraser" prefWidth="55.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Eraser">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="nobrush_button" mnemonicParsing="false" onAction="#setBrush_none" prefWidth="75.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="No Brush">
+               <HBox.margin>
+                  <Insets bottom="5.0" right="10.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+            <TextField id="brush_size" fx:id="brush_size" alignment="CENTER" prefHeight="50.0" prefWidth="40.0" promptText="Brush Size..." styleClass="main_textfield" stylesheets="@../../../stylesheet.css" text="25">
+               <HBox.margin>
+                  <Insets bottom="5.0" right="10.0" top="5.0" />
+               </HBox.margin>
+            </TextField>
+            <RadioButton fx:id="pheromones_radio_button" minHeight="25.0" mnemonicParsing="false" onAction="#pheromones_radio_button_updated" prefWidth="100.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Pheromones">
+               <HBox.margin>
+                  <Insets left="480.0" right="10.0" top="5.0" />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="1.0" left="4.0" />
+               </padding>
+            </RadioButton>
+            <Button id="play_button" fx:id="play_button" mnemonicParsing="false" onAction="#play_selected" prefWidth="50.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Play">
+               <HBox.margin>
+                  <Insets bottom="5.0" right="10.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button id="pause_button" fx:id="pause_button" mnemonicParsing="false" onAction="#pause_selected" prefWidth="55.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Pause">
+               <HBox.margin>
+                  <Insets bottom="5.0" right="10.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button id="pause_button" fx:id="reset_button" mnemonicParsing="false" onAction="#reset_action" prefWidth="55.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Reset">
+               <HBox.margin>
+                  <Insets bottom="5.0" right="10.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</Pane>
