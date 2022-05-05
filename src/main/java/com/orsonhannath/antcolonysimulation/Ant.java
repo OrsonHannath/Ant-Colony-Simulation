@@ -99,7 +99,7 @@ public class Ant {
 
         if(x < antWorld.worldSizeX && x >= 0 && y < antWorld.worldSizeY && y >= 0){
 
-            antWorld.SetPheromonePos(x, y, this.phermStrength);
+            antWorld.SetPheromonePos(x, y, this.phermStrength, inDanger, hasFood);
         }
     }
 

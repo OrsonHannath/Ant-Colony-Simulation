@@ -32,7 +32,7 @@ public class AntWorld{
     private Color[] colorDefinitions; // The Corresponding Definitions to each color
 
     private float pheromoneOpacity = 0.35f;
-    private float pheromoneBlurFactor = 0.01f;
+    private float pheromoneBlurFactor = 0.001f;
 
     private float colonyRedThresh = 0.01f;
     private float colonyGreenThresh = 0.01f;
@@ -132,27 +132,34 @@ public class AntWorld{
         }
     }
 
-    public void SetPheromonePos(int x, int y, float pherStrength){
+    public void SetPheromonePos(int x, int y, float pherStrength, boolean _inDanger, boolean _hasFood){
 
         Color phermColor = new Color(0,0,0,1);
 
-        if(pheromoneMap[x][y] != null) {
-            if (pheromoneMap[x][y].getRed() + pherStrength <= 1) {
-                phermColor = new Color(pheromoneMap[x][y].getRed() + pherStrength, phermColor.getGreen(), phermColor.getBlue(), 1);
-            } else {
-                phermColor = new Color(1, phermColor.getGreen(), phermColor.getBlue(), 1);
+        if(pheromoneMap[x][y] != null && pheromoneMap[x][y] != Color.BLACK) {
+
+            if(_inDanger) {
+                if (pheromoneMap[x][y].getRed() + pherStrength <= 1) {
+                    phermColor = new Color(pheromoneMap[x][y].getRed() + pherStrength, phermColor.getGreen(), phermColor.getBlue(), 1);
+                } else {
+                    phermColor = new Color(1, phermColor.getGreen(), phermColor.getBlue(), 1);
+                }
             }
 
-            if (pheromoneMap[x][y].getGreen() + pherStrength <= 1) {
-                phermColor = new Color(phermColor.getRed(), pheromoneMap[x][y].getGreen() + pherStrength, phermColor.getBlue(), 1);
-            } else {
-                phermColor = new Color(phermColor.getRed(), 1, phermColor.getBlue(), 1);
+            if(!_hasFood) {
+                if (pheromoneMap[x][y].getGreen() + pherStrength <= 1) {
+                    phermColor = new Color(phermColor.getRed(), pheromoneMap[x][y].getGreen() + pherStrength, phermColor.getBlue(), 1);
+                } else {
+                    phermColor = new Color(phermColor.getRed(), 1, phermColor.getBlue(), 1);
+                }
             }
 
-            if (pheromoneMap[x][y].getBlue() + pherStrength <= 1) {
-                phermColor = new Color(phermColor.getRed(), phermColor.getGreen(), pheromoneMap[x][y].getBlue() + pherStrength, 1);
-            } else {
-                phermColor = new Color(phermColor.getRed(), phermColor.getGreen(), 1, 1);
+            if(_hasFood) {
+                if (pheromoneMap[x][y].getBlue() + pherStrength <= 1) {
+                    phermColor = new Color(phermColor.getRed(), phermColor.getGreen(), pheromoneMap[x][y].getBlue() + pherStrength, 1);
+                } else {
+                    phermColor = new Color(phermColor.getRed(), phermColor.getGreen(), 1, 1);
+                }
             }
 
             pheromoneMap[x][y] = phermColor;
@@ -246,6 +253,8 @@ public class AntWorld{
 
                 Color currPhermCol = pheromoneMap[i][j];
                 this.pheromoneMap[i][j] = new Color(currPhermCol.getRed() * (1-pheromoneBlurFactor), currPhermCol.getGreen() * (1-pheromoneBlurFactor), currPhermCol.getBlue() * (1-pheromoneBlurFactor), 1);
+
+                //System.out.println(pheromoneMap[i][j].getRed() + ", " + pheromoneMap[i][j].getGreen() + ", " + pheromoneMap[i][j].getBlue());
             }
         }
     }
