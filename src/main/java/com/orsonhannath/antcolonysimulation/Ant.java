@@ -84,6 +84,9 @@ public class Ant {
         double angle = Math.toDegrees(Math.atan2(velocity.getYPos(), velocity.getXPos()));
         this.rotation = angle;
 
+        //Check if the ant is colliding with something
+        CheckCollisions();
+
         //Update Pheromone Trail
         PlacePheromones(Math.round(position.getXPos()), Math.round(position.getYPos()));
 
@@ -93,6 +96,81 @@ public class Ant {
 
         gfx.setFill(this.colonyColor);
         gfx.fillRect(this.position.getXPos(), this.position.getYPos(), 2, 2);
+    }
+
+    private void CheckCollisions(){
+
+        //Check Front Left
+        // frontPixel = antWorld.getPixelAtPoint(Math.round(position.getXPos()), Math.round(position.getYPos()));
+
+        //Check Front Middle
+
+        //Check Front Right
+
+        //Check Under Ant
+        WorldObjectTypes underPixel = antWorld.getPixelAtPoint(Math.round(position.getXPos()), Math.round(position.getYPos()));
+        PixelEventHandling(underPixel);
+
+    }
+
+    private void PixelEventHandling(WorldObjectTypes pixelObject){
+
+        if(pixelObject == WorldObjectTypes.Obstruction) {
+            HandleObstruction();
+        }else if(pixelObject == WorldObjectTypes.Food){
+            HandleFood();
+        }else if(pixelObject == WorldObjectTypes.Danger){
+            HandleDanger();
+        }else if(pixelObject == WorldObjectTypes.Colony1Location){
+            HandleColony(1);
+        }else if(pixelObject == WorldObjectTypes.Colony2Location){
+            HandleColony(2);
+        }else if(pixelObject == WorldObjectTypes.Colony3Location){
+            HandleColony(3);
+        }else if(pixelObject == WorldObjectTypes.Colony4Location){
+            HandleColony(4);
+        }else if(pixelObject == WorldObjectTypes.Background){
+            HandleBackground();
+        }
+    }
+
+    private void HandleBackground(){
+
+        if(inDanger){
+
+            inDanger = false;
+        }
+    }
+
+    private void HandleObstruction(){
+
+    }
+
+    private void HandleFood(){
+
+        if(!hasFood){
+
+            hasFoodAmount = maxStrength;
+            hasFood = true;
+        }
+    }
+
+    private void HandleDanger(){
+
+        if(!inDanger){
+
+            inDanger = true;
+            if(hasFood){
+
+                //If have food when going into danger drop it
+                hasFood = false;
+                hasFoodAmount = 0;
+            }
+        }
+    }
+
+    private void HandleColony(int _colonyNumber){
+
     }
 
     private void PlacePheromones(int x, int y){

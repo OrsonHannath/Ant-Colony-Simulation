@@ -259,6 +259,61 @@ public class AntWorld{
         }
     }
 
+    public WorldObjectTypes getPixelAtPoint(int x, int y){
+
+        float threshold = 0.05f;
+
+        //Matches Obstruction
+        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[0], threshold)){
+
+            return WorldObjectTypes.Obstruction;
+        }
+
+        //Matches Food
+        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[1], threshold)){
+
+            return WorldObjectTypes.Food;
+        }
+
+        //Matches Danger
+        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[2], threshold)){
+
+            return WorldObjectTypes.Danger;
+        }
+
+        //Matches Colony 1 Location
+        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[7], threshold)){
+
+            return WorldObjectTypes.Colony1Location;
+        }
+
+        //Matches Colony 2 Location
+        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[8], threshold)){
+
+            return WorldObjectTypes.Colony2Location;
+        }
+
+        //Matches Colony 3 Location
+        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[9], threshold)){
+
+            return WorldObjectTypes.Colony3Location;
+        }
+
+        //Matches Colony 4 Location
+        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[10], threshold)){
+
+            return WorldObjectTypes.Colony4Location;
+        }
+
+        //Matches Background
+        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[11], threshold)){
+
+            return WorldObjectTypes.Background;
+        }
+
+        return WorldObjectTypes.Default;
+    }
+
     private Color[][] canvasToArr(int worldXSize, int worldYSize, Canvas canvas){
 
         Color[][] tempColArr = new Color[worldXSize][worldYSize];
