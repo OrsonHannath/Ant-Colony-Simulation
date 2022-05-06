@@ -157,9 +157,17 @@
                   <Insets bottom="5.0" right="10.0" top="5.0" />
                </HBox.margin>
             </TextField>
+            <RadioButton fx:id="sensors_radio_button" minHeight="25.0" mnemonicParsing="false" onAction="#sensors_radio_button_updated" prefWidth="80.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Sensors">
+               <padding>
+                  <Insets bottom="1.0" left="4.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets left="400.0" right="10.0" top="5.0" />
+               </HBox.margin>
+            </RadioButton>
             <RadioButton fx:id="pheromones_radio_button" minHeight="25.0" mnemonicParsing="false" onAction="#pheromones_radio_button_updated" prefWidth="100.0" styleClass="main_button" stylesheets="@../../../stylesheet.css" text="Pheromones">
                <HBox.margin>
-                  <Insets left="480.0" right="10.0" top="5.0" />
+                  <Insets right="10.0" top="5.0" />
                </HBox.margin>
                <padding>
                   <Insets bottom="1.0" left="4.0" />

@@ -29,6 +29,7 @@ public class AntColonyController implements Initializable {
     private boolean playing = false;
     private boolean started = false;
     private boolean showPheromones = false;
+    private boolean showSensors = false;
 
     private GraphicsContext brushTool;
 
@@ -106,6 +107,9 @@ public class AntColonyController implements Initializable {
 
     @FXML
     private RadioButton pheromones_radio_button;
+
+    @FXML
+    private RadioButton sensors_radio_button;
 
     @FXML
     public void setBrush_obstruction(ActionEvent e){
@@ -224,6 +228,13 @@ public class AntColonyController implements Initializable {
         //System.out.println("Toggled");
     }
 
+    @FXML
+    public void sensors_radio_button_updated(ActionEvent e){
+
+        showSensors = sensors_radio_button.isSelected();
+        //System.out.println("Toggled");
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -297,6 +308,11 @@ public class AntColonyController implements Initializable {
     public boolean isShowPheromones(){
 
         return showPheromones;
+    }
+
+    public boolean isShowSensors(){
+
+        return showSensors;
     }
 
     private Color currentBrushColor(){

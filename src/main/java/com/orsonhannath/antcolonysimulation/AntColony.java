@@ -22,7 +22,7 @@ public class AntColony {
     private int maxStrengthCol = 5;
     private float maxPickupRangeCol = 1;
     private float steerStrengthCol = 0.5f;
-    private float wanderStrengthCol = 0.1f;
+    private float wanderStrengthCol = 0.5f;
     private float phermStrength = 0.1f;
 
     public AntColony(Color _colonyColor, String _colonyName){
@@ -44,7 +44,7 @@ public class AntColony {
     public void AddAnt(int x, int y, AntWorld antWorld){
 
         Random rand = new Random();
-        colonyAnts.add(new Ant(antWorld, this, this.colonyColor, x + rand.nextFloat(3), y + rand.nextFloat(3), maxSpeedCol + rand.nextFloat(2), maxRangeCol, maxStrengthCol + rand.nextInt(2), maxPickupRangeCol, steerStrengthCol + rand.nextFloat(2), wanderStrengthCol + rand.nextFloat(2), colonyAnts.size() + 1, phermStrength + rand.nextFloat(0.2f)));
+        colonyAnts.add(new Ant(antWorld, this, this.colonyColor, x + rand.nextFloat(3), y + rand.nextFloat(3), maxSpeedCol + rand.nextFloat(2), maxRangeCol, maxStrengthCol + rand.nextInt(2), maxPickupRangeCol, steerStrengthCol + rand.nextFloat(2), wanderStrengthCol + rand.nextFloat(0.05f), colonyAnts.size() + 1, phermStrength + rand.nextFloat(0.2f)));
     }
 
     public Vector<Ant> GetAnts(){

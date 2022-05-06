@@ -3,6 +3,7 @@ package com.orsonhannath.antcolonysimulation;
 public enum WorldObjectTypes {
 
     Default,
+    OutOfBounds,
     Background,
     Obstruction,
     Food,

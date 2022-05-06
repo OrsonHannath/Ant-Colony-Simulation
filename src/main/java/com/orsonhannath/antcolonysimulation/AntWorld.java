@@ -72,7 +72,7 @@ public class AntWorld{
 
                         Platform.runLater(() -> {
 
-                            UpdateAntGraphics(canvas, antColonyController.isShowPheromones());
+                            UpdateAntGraphics(canvas, antColonyController.isShowPheromones(), antColonyController.isShowSensors());
                             DecrementPheromoneTrails();
                         });
 
@@ -162,8 +162,16 @@ public class AntWorld{
                 }
             }
 
+            //Set the pheromone opacity to be that of the combined strength
+            phermColor = PheromoneColorOpacityStrength(phermColor);
+
             pheromoneMap[x][y] = phermColor;
         }
+    }
+
+    public Color getPheromoneAt(int x, int y){
+
+        return pheromoneMap[x][y];
     }
 
     private void UpdateAnts(){
@@ -185,7 +193,7 @@ public class AntWorld{
         }
     }
 
-    private void UpdateAntGraphics(Canvas canvas, boolean showPherms){
+    private void UpdateAntGraphics(Canvas canvas, boolean showPherms, boolean showSens){
 
         //Set the background to correct image
         javafx.scene.image.Image worldMapImage;
@@ -209,36 +217,25 @@ public class AntWorld{
 
         //Basic graphics update
         for(Ant ant : antColony1.GetAnts()){
-            ant.GraphicsUpdate(canvas.getGraphicsContext2D());
+            ant.GraphicsUpdate(canvas.getGraphicsContext2D(), showSens);
         }
 
         for(Ant ant : antColony2.GetAnts()){
-            ant.GraphicsUpdate(canvas.getGraphicsContext2D());
+            ant.GraphicsUpdate(canvas.getGraphicsContext2D(), showSens);
         }
 
         for(Ant ant : antColony3.GetAnts()){
-            ant.GraphicsUpdate(canvas.getGraphicsContext2D());
+            ant.GraphicsUpdate(canvas.getGraphicsContext2D(), showSens);
         }
 
         for(Ant ant : antColony4.GetAnts()){
-            ant.GraphicsUpdate(canvas.getGraphicsContext2D());
+            ant.GraphicsUpdate(canvas.getGraphicsContext2D(), showSens);
         }
 
         //Check if the pheromones should be displayed
         if(showPherms){
 
-            for(int x = 0; x < worldSizeX; x++){
-                for(int y = 0; y < worldSizeY; y++){
-
-                    Color pheromoneMapAtPos = pheromoneMap[x][y];
-
-                    if(!Objects.equals(pheromoneMapAtPos, new Color(0, 0, 0, 1))) {
-                        Color pheromoneCol = new Color(pheromoneMapAtPos.getRed(), pheromoneMapAtPos.getGreen(), pheromoneMapAtPos.getBlue(), pheromoneOpacity);
-                        canvas.getGraphicsContext2D().setFill(pheromoneCol);
-                        canvas.getGraphicsContext2D().fillRect(x, y, 1, 1);
-                    }
-                }
-            }
+            showPheromones(canvas);
         }
 
         canUpdateAnts = true;
@@ -252,8 +249,8 @@ public class AntWorld{
             for(int j = 0; j < worldSizeY; j++){
 
                 Color currPhermCol = pheromoneMap[i][j];
-                this.pheromoneMap[i][j] = new Color(currPhermCol.getRed() * (1-pheromoneBlurFactor), currPhermCol.getGreen() * (1-pheromoneBlurFactor), currPhermCol.getBlue() * (1-pheromoneBlurFactor), 1);
-
+                currPhermCol = new Color(currPhermCol.getRed() * (1-pheromoneBlurFactor), currPhermCol.getGreen() * (1-pheromoneBlurFactor), currPhermCol.getBlue() * (1-pheromoneBlurFactor), 1);
+                this.pheromoneMap[i][j] = PheromoneColorOpacityStrength(currPhermCol);
                 //System.out.println(pheromoneMap[i][j].getRed() + ", " + pheromoneMap[i][j].getGreen() + ", " + pheromoneMap[i][j].getBlue());
             }
         }
@@ -263,55 +260,62 @@ public class AntWorld{
 
         float threshold = 0.05f;
 
-        //Matches Obstruction
-        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[0], threshold)){
+        //Check if the ant is in bounds
+        if(x < worldSizeX && x >= 0 && y < worldSizeY && y >= 0) {
 
-            return WorldObjectTypes.Obstruction;
+
+            //Matches Obstruction
+            if (ColorMatchThreshold(worldMap[x][y], colorDefinitions[0], threshold)) {
+
+                return WorldObjectTypes.Obstruction;
+            }
+
+            //Matches Food
+            if (ColorMatchThreshold(worldMap[x][y], colorDefinitions[1], threshold)) {
+
+                return WorldObjectTypes.Food;
+            }
+
+            //Matches Danger
+            if (ColorMatchThreshold(worldMap[x][y], colorDefinitions[2], threshold)) {
+
+                return WorldObjectTypes.Danger;
+            }
+
+            //Matches Colony 1 Location
+            if (ColorMatchThreshold(worldMap[x][y], colorDefinitions[7], threshold)) {
+
+                return WorldObjectTypes.Colony1Location;
+            }
+
+            //Matches Colony 2 Location
+            if (ColorMatchThreshold(worldMap[x][y], colorDefinitions[8], threshold)) {
+
+                return WorldObjectTypes.Colony2Location;
+            }
+
+            //Matches Colony 3 Location
+            if (ColorMatchThreshold(worldMap[x][y], colorDefinitions[9], threshold)) {
+
+                return WorldObjectTypes.Colony3Location;
+            }
+
+            //Matches Colony 4 Location
+            if (ColorMatchThreshold(worldMap[x][y], colorDefinitions[10], threshold)) {
+
+                return WorldObjectTypes.Colony4Location;
+            }
+
+            //Matches Background
+            if (ColorMatchThreshold(worldMap[x][y], colorDefinitions[11], threshold)) {
+
+                return WorldObjectTypes.Background;
+            }
+
+            return WorldObjectTypes.Default;
         }
 
-        //Matches Food
-        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[1], threshold)){
-
-            return WorldObjectTypes.Food;
-        }
-
-        //Matches Danger
-        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[2], threshold)){
-
-            return WorldObjectTypes.Danger;
-        }
-
-        //Matches Colony 1 Location
-        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[7], threshold)){
-
-            return WorldObjectTypes.Colony1Location;
-        }
-
-        //Matches Colony 2 Location
-        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[8], threshold)){
-
-            return WorldObjectTypes.Colony2Location;
-        }
-
-        //Matches Colony 3 Location
-        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[9], threshold)){
-
-            return WorldObjectTypes.Colony3Location;
-        }
-
-        //Matches Colony 4 Location
-        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[10], threshold)){
-
-            return WorldObjectTypes.Colony4Location;
-        }
-
-        //Matches Background
-        if(ColorMatchThreshold(worldMap[x][y], colorDefinitions[11], threshold)){
-
-            return WorldObjectTypes.Background;
-        }
-
-        return WorldObjectTypes.Default;
+        return WorldObjectTypes.OutOfBounds;
     }
 
     private Color[][] canvasToArr(int worldXSize, int worldYSize, Canvas canvas){
@@ -481,6 +485,34 @@ public class AntWorld{
 
             CheckIfAnt((int)loc.getXPos(), (int)loc.getYPos(), true);
         }
+    }
+
+    private float MapFloat(float in,float inLower, float inUpper, float outLower, float outUpper){
+
+        //Return a value 'in' which is mapped between 'outLower' and 'outUpper' (ie. in = 10, inLower = 1, inUpper = 20, outLower = 0, outUpper = 1, RESULT: 0.5)
+        return (in - inLower) / (inUpper - inLower) * (outUpper - outLower) + outLower;
+    }
+
+    private void showPheromones(Canvas canvas){
+
+        for(int x = 0; x < worldSizeX; x++){
+            for(int y = 0; y < worldSizeY; y++){
+
+                Color pheromoneMapAtPos = pheromoneMap[x][y];
+
+                if(pheromoneMapAtPos.getOpacity() > 0) {
+                    Color pheromoneCol = new Color(pheromoneMapAtPos.getRed(), pheromoneMapAtPos.getGreen(), pheromoneMapAtPos.getBlue(), pheromoneMapAtPos.getOpacity());
+                    canvas.getGraphicsContext2D().setFill(pheromoneCol);
+                    canvas.getGraphicsContext2D().fillRect(x, y, 1, 1);
+                }
+            }
+        }
+    }
+
+    private Color PheromoneColorOpacityStrength(Color color){
+
+        double combinedRGBStrength = color.getRed() + color.getGreen() + color.getBlue();
+        return new Color(color.getRed(), color.getGreen(), color.getBlue(), MapFloat((float) combinedRGBStrength, 0, 3, 0, pheromoneOpacity));
     }
 
     private boolean ColorMatchThreshold(Color col, Color match, float thresholdR, float thresholdG, float thresholdB){

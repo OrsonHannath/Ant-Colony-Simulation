@@ -30,6 +30,8 @@ public class Ant {
     private Vector2 velocity;
     private double rotation;
 
+    private Vector2 prevPosition;
+
     //Food Stats
     private boolean _hasFoodTarget;
     private Vector2 foodTargetPos;
@@ -38,6 +40,14 @@ public class Ant {
     private int hasFoodAmount;
 
     private boolean inDanger;
+
+    //Sensors
+    private float viewDistance = 1;
+    private int showSensorSize = 1;
+    private Vector2 fLeftPosition = new Vector2(0,0);
+    private Vector2 fPosition = new Vector2(0,0);
+    private Vector2 fRightPosition = new Vector2(0,0);
+
 
     public Ant(AntWorld _antWorld, AntColony _antsColony, Color _colonyColor, float _xPos, float _yPos, float _maxSpeed, float _maxRange, int _maxStrength, float _maxPickupRange, float _steerStrength, float _wanderStrength, int _id, float _phermStrength){
 
@@ -79,38 +89,129 @@ public class Ant {
         Vector2 acceleration = desiredSteeringForce.ClampMagnitude(steerStrength).Divide(1);
 
         velocity = velocity.Plus(acceleration.Multiply(0.016f)).ClampMagnitude(maxSpeed);
+        prevPosition = position; //Set the previous position (position before the ant moves)
         position = position.Plus(velocity.Multiply(0.016f));
 
         double angle = Math.toDegrees(Math.atan2(velocity.getYPos(), velocity.getXPos()));
         this.rotation = angle;
 
         //Check if the ant is colliding with something
-        CheckCollisions();
+        DetermineMovement();
 
         //Update Pheromone Trail
         PlacePheromones(Math.round(position.getXPos()), Math.round(position.getYPos()));
 
     }
 
-    public void GraphicsUpdate(GraphicsContext gfx){
+    public void GraphicsUpdate(GraphicsContext gfx, boolean showSensors){
 
         gfx.setFill(this.colonyColor);
         gfx.fillRect(this.position.getXPos(), this.position.getYPos(), 2, 2);
+
+        //Display the ants sensors
+        if(showSensors){
+
+            if(fLeftPosition != null && fPosition != null && fRightPosition != null){
+
+                gfx.setFill(Color.RED);
+                gfx.fillRect(this.fLeftPosition.getXPos(), this.fLeftPosition.getYPos(), showSensorSize, showSensorSize);
+                //System.out.println("Red: " + "x: " + Math.round(this.fLeftPosition.getXPos()) + ", y: " + Math.round(this.fLeftPosition.getYPos()));
+
+                gfx.setFill(Color.GREEN);
+                gfx.fillRect(this.fPosition.getXPos(), this.fPosition.getYPos(), showSensorSize, showSensorSize);
+                //System.out.println("Green: " + "x: " + Math.round(this.fPosition.getXPos()) + ", y: " + Math.round(this.fPosition.getYPos()));
+
+                gfx.setFill(Color.BLUE);
+                gfx.fillRect(this.fRightPosition.getXPos(), this.fRightPosition.getYPos(), showSensorSize, showSensorSize);
+                //System.out.println("Blue: " + "x: " + Math.round(this.fRightPosition.getXPos()) + ", y: " + Math.round(this.fRightPosition.getYPos()));
+
+            }
+        }
     }
 
-    private void CheckCollisions(){
+    private void DetermineMovement(){
 
         //Check Front Left
-        // frontPixel = antWorld.getPixelAtPoint(Math.round(position.getXPos()), Math.round(position.getYPos()));
+        double fLeftAngle = Math.toRadians(this.rotation - 45f);
+        this.fLeftPosition = new Vector2((float)(position.getXPos() + Math.cos(fLeftAngle) * this.viewDistance), (float)(position.getYPos() + Math.sin(fLeftAngle) * this.viewDistance));
+        WorldObjectTypes fLeftPixel = antWorld.getPixelAtPoint(Math.round(fLeftPosition.getXPos()), Math.round(fLeftPosition.getYPos()));
 
         //Check Front Middle
+        double frontAngle = Math.toRadians(this.rotation);
+        this.fPosition = new Vector2((float)(position.getXPos() + Math.cos(frontAngle) * this.viewDistance), (float)(position.getYPos() + Math.sin(frontAngle) * this.viewDistance));
+        WorldObjectTypes frontPixel = antWorld.getPixelAtPoint(Math.round(fPosition.getXPos()), Math.round(fPosition.getYPos()));
 
         //Check Front Right
+        double fRightAngle = Math.toRadians(this.rotation + 45f);
+        this.fRightPosition = new Vector2((float)(position.getXPos() + Math.cos(fRightAngle) * this.viewDistance), (float)(position.getYPos() + Math.sin(fRightAngle) * this.viewDistance));
+        WorldObjectTypes fRightPixel = antWorld.getPixelAtPoint(Math.round(fRightPosition.getXPos()), Math.round(fRightPosition.getYPos()));
 
         //Check Under Ant
         WorldObjectTypes underPixel = antWorld.getPixelAtPoint(Math.round(position.getXPos()), Math.round(position.getYPos()));
         PixelEventHandling(underPixel);
 
+        //Maybe useful ---
+        //fLeftPixel != WorldObjectTypes.Obstruction && fLeftPixel != WorldObjectTypes.OutOfBounds && fLeftPixel != WorldObjectTypes.Danger && fRightPixel != WorldObjectTypes.Obstruction && fRightPixel != WorldObjectTypes.OutOfBounds && fRightPixel != WorldObjectTypes.Danger && frontPixel != WorldObjectTypes.Obstruction && frontPixel != WorldObjectTypes.OutOfBounds && frontPixel != WorldObjectTypes.Danger && frontPixel != WorldObjectTypes.Food
+        //Maybe useful ---
+
+        // *** Determine what the ant should try to follow ***
+        //This checks to see if any of the sensors are sensing either Obstruction, OutOfBounds or Danger
+        if(fLeftPixel != WorldObjectTypes.Background && frontPixel != WorldObjectTypes.Background && fRightPixel != WorldObjectTypes.Background){
+
+            //Check what is being sensed
+
+        }else{
+
+            //Follow Pheromones
+            FollowPheromones();
+        }
+
+    }
+
+    private void FollowPheromones(){
+
+        Color fLeftPixelColor = antWorld.getPheromoneAt(Math.round(fLeftPosition.getXPos()), Math.round(fLeftPosition.getYPos()));
+        Color frontPixelColor = antWorld.getPheromoneAt(Math.round(fPosition.getXPos()), Math.round(fPosition.getYPos()));
+        Color fRightPixelColor = antWorld.getPheromoneAt(Math.round(fRightPosition.getXPos()), Math.round(fRightPosition.getYPos()));
+
+        double fl = 0;
+        double f = 0;
+        double fr = 0;
+
+        if(this.hasFood){
+
+            //Follow Home (Blue)
+            fl = fLeftPixelColor.getBlue();
+            f = frontPixelColor.getBlue();
+            fr = frontPixelColor.getBlue();
+
+        }else {
+
+            // Maybe dont all follow green maybe green should only be placed when an ant is on its way back to base with food
+
+            //Follow Explore (Green)
+            fl = fLeftPixelColor.getGreen();
+            f = frontPixelColor.getGreen();
+            fr = frontPixelColor.getGreen();
+        }
+
+        //Determine which way to go
+        if(f > Math.max(fl, fr)){
+
+            //Go forward
+            desiredDirection = desiredDirection;
+
+        }else if(fl > fr){
+
+            //Go left
+            this.desiredDirection = desiredDirection.Plus(fLeftPosition.Minus(desiredDirection)).Normalized();
+
+        }else if(fr > fl){
+
+            //Go right
+            this.desiredDirection = desiredDirection.Plus(fRightPosition.Minus(desiredDirection)).Normalized();
+
+        }
     }
 
     private void PixelEventHandling(WorldObjectTypes pixelObject){
@@ -144,6 +245,9 @@ public class Ant {
 
     private void HandleObstruction(){
 
+
+        //Ant needs to adjust its direction and cannot move until they're no longer in an obstruction
+        position = prevPosition;
     }
 
     private void HandleFood(){
@@ -170,6 +274,10 @@ public class Ant {
     }
 
     private void HandleColony(int _colonyNumber){
+
+    }
+
+    private void HandleSteering(){
 
     }
 
