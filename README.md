@@ -8,7 +8,7 @@ The simulation offers the user the ability to draw their specific simulation wor
 
 ### Start, Stop and Reset
 The simulation can be started, stopped and reset at the click of a button.
-![Start, Stop and Reset](assets/StartStopReset.gif)
+![Start, Stop and Reset](assets/PlayPauseReset.gif)
 
 ## Ant Colony Simulation Examples
 ### Ants Locating Food
