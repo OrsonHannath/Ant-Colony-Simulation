@@ -252,6 +252,9 @@ public class Ant {
 
     private void HandleObstruction(){
 
+        // Flip the ant's direction 180 degrees
+        this.velocity = new Vector2(0, 0);
+        this.desiredDirection = this.desiredDirection.Multiply(-1);
 
         //Ant needs to adjust its direction and cannot move until they're no longer in an obstruction
         position = prevPosition;
