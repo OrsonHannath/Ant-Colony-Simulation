@@ -12,4 +12,4 @@ The simulation can be started, stopped and reset at the click of a button.
 
 ## Ant Colony Simulation Examples
 ### Ants Locating Food
-[![Ants Locating Food](assets/FindingFood.gif)
+![Ants Locating Food](assets/FindingFood.gif)
