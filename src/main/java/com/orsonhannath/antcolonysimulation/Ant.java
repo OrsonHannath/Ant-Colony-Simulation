@@ -178,21 +178,28 @@ public class Ant {
         double f = 0;
         double fr = 0;
 
+        // Search for food follow blue if possible turn around if at home
+        // Locate food and follow a green pheromone trail home while dropping a blue pheromone trail
+
         if(this.hasFood){
 
             //Follow Home (Blue)
-            fl = fLeftPixelColor.getBlue();
-            f = frontPixelColor.getBlue();
-            fr = frontPixelColor.getBlue();
+            fl = fLeftPixelColor.getBlue() * 0.8f;
+            f = frontPixelColor.getBlue() * 0.8f;
+            fr = fRightPixelColor.getBlue() * 0.8f;
+
+            fl += fLeftPixelColor.getGreen() * 0.2f;
+            f += frontPixelColor.getGreen() * 0.2f;
+            fr += fRightPixelColor.getGreen() * 0.2f;
 
         }else {
 
             // Maybe dont all follow green maybe green should only be placed when an ant is on its way back to base with food
 
-            //Follow Explore (Green)
-            fl = fLeftPixelColor.getGreen();
-            f = frontPixelColor.getGreen();
-            fr = frontPixelColor.getGreen();
+            //Follow Food trail if you can find it (Blue)
+            fl = fLeftPixelColor.getBlue();
+            f = frontPixelColor.getBlue();
+            fr = fRightPixelColor.getBlue();
         }
 
         //Determine which way to go
@@ -256,6 +263,10 @@ public class Ant {
 
             hasFoodAmount = maxStrength;
             hasFood = true;
+
+            // Flip the ant's direction 180 degrees
+            this.velocity = new Vector2(0, 0);
+            this.desiredDirection = this.desiredDirection.Multiply(-1);
         }
     }
 
@@ -282,6 +293,10 @@ public class Ant {
     }
 
     private void PlacePheromones(int x, int y){
+
+        // Blue has food
+        // Green doesn't have food
+        // Red is danger
 
         if(x < antWorld.worldSizeX && x >= 0 && y < antWorld.worldSizeY && y >= 0){
 

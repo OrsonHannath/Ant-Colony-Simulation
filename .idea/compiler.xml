@@ -15,7 +15,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Ant Colony Simulation" options="--add-exports javafx.controls/javafx=com.orsonhannath.antcolonysimulation" />
+      <module name="Ant Colony Simulation" options="" />
     </option>
   </component>
 </project>

@@ -17,7 +17,7 @@ public class AntColony {
     private Vector<ColonyLocation> colonyLocations = new Vector<>();
 
     //Colony Main Stats
-    private float maxSpeedCol = 5f;
+    private float maxSpeedCol = 50f;
     private float maxRangeCol = 1;
     private int maxStrengthCol = 5;
     private float maxPickupRangeCol = 1;
